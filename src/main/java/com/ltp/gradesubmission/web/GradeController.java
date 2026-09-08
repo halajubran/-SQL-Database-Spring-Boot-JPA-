@@ -14,17 +14,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.ltp.gradesubmission.service.GradeService;
+
+import lombok.AllArgsConstructor;
+
 import com.ltp.gradesubmission.entity.Grade;
 
+@AllArgsConstructor 
 @RestController
 @RequestMapping("/grade")
 public class GradeController {
     
-  @Autowired
 private GradeService gradeService;  
     @GetMapping("/student/{studentId}/course/{courseId}")
     public ResponseEntity<Grade> getGrade(@PathVariable Long studentId, @PathVariable Long courseId) {
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(gradeService.getGrade(studentId, courseId),HttpStatus.OK);
     }
 
     @PostMapping("/student/{studentId}/course/{courseId}")

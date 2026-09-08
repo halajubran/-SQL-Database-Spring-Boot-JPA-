@@ -16,11 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ltp.gradesubmission.entity.Student;
 import com.ltp.gradesubmission.service.StudentService;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor 
 @RestController
 @RequestMapping("/student")
 public class StudentController {
 
-    @Autowired
     StudentService studentService;
     
     @GetMapping("/{id}")
@@ -38,11 +40,5 @@ public class StudentController {
         studentService.deleteStudent(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-    @GetMapping("/all")
-    public ResponseEntity<List<Student>> getStudents() {
-        return new ResponseEntity<>(studentService.getStudents(), HttpStatus.OK);
-    }
-
 
 }
