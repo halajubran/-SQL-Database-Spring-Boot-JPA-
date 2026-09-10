@@ -1,12 +1,16 @@
 package com.ltp.gradesubmission.service;
 
+import java.lang.StackWalker.Option;
+import java.rmi.StubNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ltp.gradesubmission.entity.Grade;
 import com.ltp.gradesubmission.entity.Student;
+import com.ltp.gradesubmission.exception.StudentNotFoundException;
 import com.ltp.gradesubmission.repository.StudentRepository;
 
 import lombok.AllArgsConstructor;
@@ -19,8 +23,8 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student getStudent(Long id) {
-        printGrades(studentRepository.findById(id).get());
-        return studentRepository.findById(id).get();
+        Optional<Student> student = studentRepository.findById(id);
+        return unwrapStudent(student, id);
     }
 
     @Override
@@ -42,5 +46,10 @@ public class StudentServiceImpl implements StudentService {
         for (Grade grade : student.getGrades()) {
             System.out.println(grade.getScore());
         }
+    }
+
+     static Student unwrapStudent(Optional<Student> entity, Long id) {
+        if (entity.isPresent()) return entity.get();
+        else throw new StudentNotFoundException(id);
     }
 }
